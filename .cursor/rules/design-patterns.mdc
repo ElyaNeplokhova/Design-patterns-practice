@@ -1,0 +1,81 @@
+---
+description: Project conventions and coding standards for the Design Patterns study repo
+alwaysApply: true
+---
+
+# Design Patterns Practice — Project Conventions
+
+## Folder Structure
+
+```
+patterns/<pattern-name>/
+  README.md            # Pattern explanation, UML, usage examples
+  shared/
+    types.ts           # Contracts shared between class and React versions
+  class/
+    index.ts           # Public exports
+    handlers/          # Pattern participants (handlers, strategies, etc.)
+    chain.ts           # Composition / usage example
+    __tests__/
+  react/
+    hooks/
+    components/
+    handlers/          # React-specific handler implementations
+    __tests__/
+```
+
+Demo pages live in `app/patterns/<pattern-name>/page.tsx`.
+
+## Key Principles
+
+- Each pattern has **two independent realizations**: `class/` (pure TS/OOP) and `react/` (hooks + components).
+- `shared/types.ts` holds only interfaces and type aliases — never implementation.
+- `react/` must **not** import from `class/`; both import only from `shared/`.
+- Keep handler files small — one handler per file.
+
+## TypeScript Standards
+
+- Strict mode (`"strict": true`).
+- Prefer `interface` for object shapes, `type` for unions/intersections.
+- No `any`; use `unknown` + type narrowing when the type is truly dynamic.
+- Export named exports, not default exports.
+- Suffix abstract classes with no special prefix — use clear names like `ValidationHandler`.
+
+## Class-Based Implementation (`class/`)
+
+- Abstract base class defines `setNext()` returning the passed handler (fluent API) and `handle()`.
+- Concrete handlers implement only the pattern-specific logic (e.g. `validate()`).
+- `chain.ts` wires handlers together and serves as a runnable example.
+- Tests go in `__tests__/` — test each handler in isolation, then the full chain.
+
+## React Implementation (`react/`)
+
+- Functional components only; no class components.
+- Extract pattern logic into a custom hook (e.g. `useValidationChain`).
+- Handlers can be plain functions or lightweight classes — choose whichever fits React idioms better.
+- Components receive behaviour via hooks, not direct class instantiation in JSX.
+- Tests: use React Testing Library for components, plain unit tests for hooks.
+
+## Testing
+
+- Test runner: Vitest (preferred) or Jest.
+- Each `__tests__/` folder mirrors its parent: one test file per source file when practical.
+- Required test cases per pattern:
+  1. Each participant in isolation.
+  2. Full composition (happy path).
+  3. Edge / failure cases (e.g. chain stops at first failure).
+
+## Naming Conventions
+
+| Item | Convention | Example |
+|------|-----------|---------|
+| Files | kebab-case | `min-length-handler.ts` |
+| Interfaces / Types | PascalCase | `ValidationRequest` |
+| Classes | PascalCase | `RequiredHandler` |
+| Hooks | camelCase with `use` prefix | `useValidationChain` |
+| Components | PascalCase | `ValidationForm` |
+| Test files | `<source>.test.ts(x)` | `chain.test.ts` |
+
+## Scalability
+
+When adding a new pattern, replicate the same `shared/ + class/ + react/` layout under `patterns/<new-pattern>/` and add a demo page under `app/patterns/<new-pattern>/page.tsx`.
