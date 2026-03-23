@@ -9,7 +9,9 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "chain:class": "tsx patterns/chain-of-responsibility/class/chain.ts"
+    "chain:class": "tsx patterns/chain-of-responsibility/class/chain.ts",
+    "strategy:class": "tsx patterns/strategy/class/context.ts",
+    "mediator:class": "tsx patterns/mediator/class/chat-demo.ts"
   },
   "dependencies": {
     "next": "14.2.18",

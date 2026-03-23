@@ -9,6 +9,12 @@ export default function HomePage() {
         <li>
           <Link href="/patterns/chain-of-responsibility">Chain of Responsibility</Link>
         </li>
+        <li>
+          <Link href="/patterns/strategy">Strategy</Link>
+        </li>
+        <li>
+          <Link href="/patterns/mediator">Mediator</Link>
+        </li>
       </ul>
     </main>
   );
